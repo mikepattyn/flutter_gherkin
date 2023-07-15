@@ -22,3 +22,11 @@ class GivenIAddTheUsers extends Given1<Table> {
   @override
   RegExp get pattern => RegExp(r"I add the users");
 }
+
+class Table {
+  List<Row> rows = [];
+}
+
+class Row {
+  List<String> columns = [];
+}

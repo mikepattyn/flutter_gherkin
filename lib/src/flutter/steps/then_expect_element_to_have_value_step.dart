@@ -13,21 +13,17 @@ import 'package:gherkin/gherkin.dart';
 ///
 ///   `Then I expect "controlKey" to be "Hello World"`
 ///   `And I expect "controlKey" to be "Hello World"`
-class ThenExpectElementToHaveValue
-    extends Then2WithWorld<String, String, FlutterWorld> {
+class ThenExpectElementToHaveValue extends Then2WithWorld<String, String, FlutterWorld> {
   @override
   RegExp get pattern => RegExp(r"I expect the {string} to be {string}");
 
   @override
   Future<void> executeStep(String key, String value) async {
     try {
-      final text = await FlutterDriverUtils.getText(
-          world.driver, find.byValueKey(key),
-          timeout: timeout * .9);
+      final text = await FlutterDriverUtils.getText(world.driver!, find.byValueKey(key), timeout: timeout! * .9);
       expect(text, value);
     } catch (e) {
-      await reporter.message(
-          "Step error '${pattern.pattern}': $e", MessageLevel.error);
+      await reporter.message("Step error '${pattern.pattern}': $e", MessageLevel.error);
       rethrow;
     }
   }

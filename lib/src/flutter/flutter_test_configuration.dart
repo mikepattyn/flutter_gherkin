@@ -1,17 +1,12 @@
 import 'dart:io';
 import 'package:flutter_gherkin/flutter_gherkin.dart';
-import 'package:flutter_gherkin/src/flutter/flutter_world.dart';
 import 'package:flutter_gherkin/src/flutter/hooks/app_runner_hook.dart';
-import 'package:flutter_gherkin/src/flutter/steps/given_i_open_the_drawer_step.dart';
-import 'package:flutter_gherkin/src/flutter/steps/then_expect_element_to_have_value_step.dart';
-import 'package:flutter_gherkin/src/flutter/steps/when_fill_field_step.dart';
-import 'package:flutter_gherkin/src/flutter/steps/when_pause_step.dart';
-import 'package:flutter_gherkin/src/flutter/steps/when_tap_widget_step.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:gherkin/gherkin.dart';
 
 class FlutterTestConfiguration extends TestConfiguration {
-  String _observatoryDebuggerUri;
+  FlutterTestConfiguration();
+  late String _observatoryDebuggerUri;
 
   /// restarts the application under test between each scenario.
   /// Defaults to true to avoid the application being in an invalid state
@@ -36,18 +31,13 @@ class FlutterTestConfiguration extends TestConfiguration {
 
   void setObservatoryDebuggerUri(String uri) => _observatoryDebuggerUri = uri;
 
-  Future<FlutterDriver> createFlutterDriver([String dartVmServiceUrl]) async {
-    dartVmServiceUrl = (dartVmServiceUrl ?? _observatoryDebuggerUri) ??
-        Platform.environment['VM_SERVICE_URL'];
+  Future<FlutterDriver> createFlutterDriver([String? dartVmServiceUrl]) async {
+    dartVmServiceUrl = (dartVmServiceUrl ?? _observatoryDebuggerUri) ?? Platform.environment['VM_SERVICE_URL'];
 
-    return await FlutterDriver.connect(
-        dartVmServiceUrl: dartVmServiceUrl,
-        logCommunicationToFile: false,
-        printCommunication: false);
+    return await FlutterDriver.connect(dartVmServiceUrl: dartVmServiceUrl, logCommunicationToFile: false, printCommunication: false);
   }
 
-  Future<FlutterWorld> createFlutterWorld(
-      TestConfiguration config, FlutterWorld world) async {
+  Future<FlutterWorld> createFlutterWorld(TestConfiguration config, FlutterWorld world) async {
     world = world ?? FlutterWorld();
     final driver = await createFlutterDriver();
     world.setFlutterDriver(driver);
@@ -58,22 +48,22 @@ class FlutterTestConfiguration extends TestConfiguration {
   void prepare() {
     final providedCreateWorld = createWorld;
     createWorld = (config) async {
-      FlutterWorld world;
+      FlutterWorld world = FlutterWorld();
       if (providedCreateWorld != null) {
-        world = await providedCreateWorld(config);
+        world = (await providedCreateWorld(config) as FlutterWorld);
       }
 
       return await createFlutterWorld(config, world);
     };
 
-    hooks = List.from(hooks ?? [])..add(FlutterAppRunnerHook());
-    stepDefinitions = List.from(stepDefinitions ?? [])
+    hooks = List.from(hooks as List<dynamic>)..add(FlutterAppRunnerHook());
+    stepDefinitions = List.from(stepDefinitions as List<dynamic>)
       ..addAll([
         ThenExpectElementToHaveValue(),
         WhenTapWidget(),
         GivenOpenDrawer(),
         WhenPauseStep(),
-        WhenFillFieldStep()
+        WhenFillFieldStep(),
       ]);
   }
 }

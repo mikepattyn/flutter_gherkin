@@ -3,9 +3,10 @@ description: A Gherkin / Cucumber parser and test runner for Dart and Flutter
 version: 1.0.4
 author: Jon Samwell <jonsamwell@gmail.com>
 homepage: https://github.com/jonsamwell/flutter_gherkin
+publish_to: none
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -14,11 +15,13 @@ dependencies:
     sdk: flutter
   flutter_driver:
     sdk: flutter
-  glob: ^1.1.7
-  meta: ">=1.1.6 <=1.1.7"
-  gherkin: ^1.0.4
+
+  glob:
+  meta: 
+  gherkin: 
+    path: ./../dart_gherkin
 
 dev_dependencies:
-  test: ">=1.6.1 <=1.6.4"
+  test:
 
 flutter:
